@@ -26,4 +26,16 @@ public class FlightRepository {
         return flightsList;
     }
 
+    public Flight fetchFlight(int id) {
+
+        return getFlights().stream()
+                .filter(c -> c.getId() == id)
+                .toList()
+                .get(0);
+    }
+
+    public void deleteById(int id) {
+        getFlights().removeIf(c -> c.getId() == id);
+    }
+
 }

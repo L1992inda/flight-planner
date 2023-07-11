@@ -73,7 +73,16 @@ public class FlightService {
         repository.clearFlightsList();
     }
 
-    public void deleteById(int id) {
-        repository.getFlights().removeIf(c -> c.getId() == id);
+    public Flight fetch(int id) {
+        try {
+            return repository.fetchFlight(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    public synchronized void delete(int id) {
+        repository.deleteById(id);
     }
 }

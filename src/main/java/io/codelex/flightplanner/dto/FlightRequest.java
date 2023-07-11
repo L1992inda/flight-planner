@@ -30,27 +30,27 @@ public class FlightRequest {
         this.arrivalTime = arrivalTime;
     }
 
-    public Airport getFrom() {
+    public @NotNull Airport getFrom() {
         return from;
     }
 
-    public void setFrom(Airport from) {
+    public void setFrom(@NotNull Airport from) {
         this.from = from;
     }
 
-    public Airport getTo() {
+    public @NotNull Airport getTo() {
         return to;
     }
 
-    public void setTo(Airport to) {
+    public void setTo(@NotNull Airport to) {
         this.to = to;
     }
 
-    public String getCarrier() {
+    public @NotNull String getCarrier() {
         return carrier;
     }
 
-    public void setCarrier(String carrier) {
+    public void setCarrier(@NotNull String carrier) {
         this.carrier = carrier;
     }
 

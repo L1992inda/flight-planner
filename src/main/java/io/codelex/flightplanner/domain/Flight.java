@@ -51,19 +51,19 @@ public class Flight {
         this.id = id;
     }
 
-    public Airport getFrom() {
+    public @NotNull Airport getFrom() {
         return from;
     }
 
-    public void setFrom(Airport from) {
+    public void setFrom(@NotNull Airport from) {
         this.from = from;
     }
 
-    public Airport getTo() {
+    public @NotNull Airport getTo() {
         return to;
     }
 
-    public void setTo(Airport to) {
+    public void setTo(@NotNull Airport to) {
         this.to = to;
     }
 

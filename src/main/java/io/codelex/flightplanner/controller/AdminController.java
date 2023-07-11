@@ -26,10 +26,16 @@ public class AdminController {
 
     }
 
+    @GetMapping("/flights/{id}")
+    public Flight findFlightById(@PathVariable("id") int id) {
+
+        return service.fetch(id);
+    }
+
     @DeleteMapping("/flights/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteFlightById(@PathVariable("id") int id) {
-        service.deleteById(id);
+        service.delete(id);
     }
 
 
