@@ -1,9 +1,8 @@
 package io.codelex.flightplanner.domain;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
-
-import jakarta.validation.constraints.NotBlank;
 
 @Validated
 public class Airport {

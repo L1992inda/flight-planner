@@ -5,15 +5,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Repository
 public class FlightRepository {
 
     private final List<Flight> flightsList = new ArrayList<>();
 
 
-    public Flight addFlight(Flight flight){
-         flightsList.add(flight);
-         return flight;
+    public Flight addFlight(Flight flight) {
+        flightsList.add(flight);
+        return flight;
     }
 
 
@@ -21,7 +22,7 @@ public class FlightRepository {
         flightsList.clear();
     }
 
-    public List<Flight> getFlights(){
+    public List<Flight> getFlights() {
         return flightsList;
     }
 

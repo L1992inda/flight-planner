@@ -8,18 +8,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 
-    @RestController
-    @RequestMapping("/testing-api")
-    public class TestController {
-        FlightService service;
-        public TestController(FlightService service) {
-            this.service = service;
-        }
+@RestController
+@RequestMapping("/testing-api")
+public class TestController {
+    FlightService service;
 
-        @PostMapping("/clear")
-        @ResponseStatus(HttpStatus.OK)
-        public void clearAll(){
-            service.clear();
-        }
+    public TestController(FlightService service) {
+        this.service = service;
     }
+
+    @PostMapping("/clear")
+    @ResponseStatus(HttpStatus.OK)
+    public void clearAll() {
+        service.clear();
+    }
+}
 
