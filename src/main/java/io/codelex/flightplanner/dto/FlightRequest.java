@@ -1,54 +1,33 @@
-package io.codelex.flightplanner.domain;
+package io.codelex.flightplanner.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import io.codelex.flightplanner.domain.Airport;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDateTime;
-
 @Validated
-public class Flight {
-    @NotBlank
-    private int id;
+public class FlightRequest {
     @Valid
     @NotNull
-    @NotBlank
-    private Airport from;
+    Airport from;
     @Valid
     @NotNull
+    Airport to;
     @NotBlank
-    private Airport to;
+    @NotNull
+    String carrier;
     @NotBlank
-    private String carrier;
+    String departureTime;
+    @NotBlank
+    String arrivalTime;
 
-    @NotBlank
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime departureTime;
-
-    @NotBlank
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime arrivalTime;
-
-    public Flight(int id, @NotNull Airport from, @NotNull Airport to, String carrier, LocalDateTime departureTime, LocalDateTime arrivalTime) {
-        this.id = id;
+    public FlightRequest(@NotNull Airport from, @NotNull Airport to, @NotNull String carrier, String departureTime, String arrivalTime) {
         this.from = from;
         this.to = to;
         this.carrier = carrier;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
-
-
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Airport getFrom() {
@@ -75,19 +54,20 @@ public class Flight {
         this.carrier = carrier;
     }
 
-    public LocalDateTime getDepartureTime() {
+    public String getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
+    public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
     }
 
-    public LocalDateTime getArrivalTime() {
+    public String getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(LocalDateTime arrivalTime) {
+    public void setArrivalTime(String arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 }
+

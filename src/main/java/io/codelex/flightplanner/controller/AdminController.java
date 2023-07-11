@@ -1,7 +1,7 @@
 package io.codelex.flightplanner.controller;
 
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.dto.FlightDto;
+import io.codelex.flightplanner.dto.FlightRequest;
 import io.codelex.flightplanner.service.FlightService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,8 +21,8 @@ public class AdminController {
 
     @PutMapping("/flights")
     @ResponseStatus(HttpStatus.CREATED)
-    public Flight add(@RequestBody @Valid FlightDto dto) {
-        return service.add(dto);
+    public Flight add(@RequestBody @Valid FlightRequest flightRequest) {
+        return service.add(flightRequest);
 
     }
 

@@ -1,7 +1,7 @@
 package io.codelex.flightplanner.service;
 
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.dto.FlightDto;
+import io.codelex.flightplanner.dto.FlightRequest;
 import io.codelex.flightplanner.repository.FlightRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,19 +20,19 @@ public class FlightService {
         this.repository = repository;
     }
 
-    public synchronized Flight add(FlightDto dto) {
+    public synchronized Flight add(FlightRequest request) {
         int id = repository.getFlights().stream().mapToInt(Flight::getId).max().orElse(0);
         Flight flight = new Flight(id + 1,
-                dto.getFrom(),
-                dto.getTo(),
-                dto.getCarrier(),
-                arrivalDepartureTime(dto.getArrivalTime()),
-                arrivalDepartureTime(dto.getDepartureTime()));
+                request.getFrom(),
+                request.getTo(),
+                request.getCarrier(),
+                arrivalDepartureTime(request.getDepartureTime()),
+                arrivalDepartureTime(request.getArrivalTime()));
         if (equalFlight(flight)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         } else if (sameAirport(flight)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } else if (strangeDate(flight)) {
+        } else if (checkTime(flight)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
         } else {
@@ -44,27 +44,29 @@ public class FlightService {
 
     private boolean equalFlight(Flight flight) {
         return repository.getFlights().stream()
-                .anyMatch(c -> c.getFromAirport().getAirport().equals(flight.getFromAirport().getAirport()) &
-                        c.getFromAirport().getCity().equals(flight.getFromAirport().getCity()) &
-                        c.getFromAirport().getCountry().equals(flight.getFromAirport().getCountry()) &
+                .anyMatch(c -> c.getFrom().getAirport().equals(flight.getFrom().getAirport()) &
+                        c.getFrom().getCity().equals(flight.getFrom().getCity()) &
+                        c.getFrom().getCountry().equals(flight.getFrom().getCountry()) &
                         c.getCarrier().equals(flight.getCarrier()) &
                         c.getArrivalTime().equals(flight.getArrivalTime()) &
                         c.getDepartureTime().equals(flight.getDepartureTime()));
     }
 
     private boolean sameAirport(Flight flight) {
-        return (flight.getFromAirport().getAirport().trim().equalsIgnoreCase(flight.getToAirport().getAirport().trim()) &
-                flight.getFromAirport().getCity().trim().equalsIgnoreCase(flight.getToAirport().getCity().trim()) &
-                flight.getFromAirport().getCountry().trim().equalsIgnoreCase(flight.getToAirport().getCountry().trim()));
+        return flight.getFrom().getAirport().trim().equalsIgnoreCase(flight.getTo().getAirport().trim()) &
+                flight.getFrom().getCity().trim().equalsIgnoreCase(flight.getTo().getCity().trim()) &
+                flight.getFrom().getCountry().trim().equalsIgnoreCase(flight.getTo().getCountry().trim());
     }
 
-    private boolean strangeDate(Flight flight) {
-        return (flight.getDepartureTime().isBefore(flight.getArrivalTime()) ||
-                flight.getArrivalTime().equals(flight.getDepartureTime()));
+    public boolean checkTime(Flight flight) {
+        return flight.getArrivalTime()
+                .isBefore(flight.getDepartureTime()) ||
+                flight.getDepartureTime().equals(flight.getArrivalTime());
     }
 
     private LocalDateTime arrivalDepartureTime(String time) {
         return LocalDateTime.parse(time, formatter);
+
     }
 
     public void clear() {

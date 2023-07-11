@@ -48,32 +48,5 @@ public class Airport {
         this.airport = airport;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Airport airport1 = (Airport) o;
-
-        if (!getCountry().equals(airport1.getCountry())) return false;
-        if (!getCity().equals(airport1.getCity())) return false;
-        return getAirport().equals(airport1.getAirport());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getCountry().hashCode();
-        result = 31 * result + getCity().hashCode();
-        result = 31 * result + getAirport().hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Airport{" +
-                "country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", airport='" + airport + '\'' +
-                '}';
-    }
 }
