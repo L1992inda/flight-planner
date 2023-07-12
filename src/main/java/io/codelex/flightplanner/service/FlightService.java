@@ -1,5 +1,6 @@
 package io.codelex.flightplanner.service;
 
+import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.dto.FlightRequest;
 import io.codelex.flightplanner.repository.FlightRepository;
@@ -9,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 
 @Service
@@ -84,5 +86,9 @@ public class FlightService {
 
     public synchronized void delete(int id) {
         repository.deleteById(id);
+    }
+
+    public List<Airport> searchAirport(String search) {
+        return repository.searchByPhrases(search);
     }
 }

@@ -1,5 +1,6 @@
 package io.codelex.flightplanner.repository;
 
+import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import org.springframework.stereotype.Repository;
 
@@ -38,4 +39,13 @@ public class FlightRepository {
         getFlights().removeIf(c -> c.getId() == id);
     }
 
+    public List<Airport> searchByPhrases(String search) {
+
+        return getFlights().stream().filter(c -> c.getFrom().getAirport().toLowerCase().contains(search.trim().toLowerCase()) ||
+                c.getFrom().getCity().toLowerCase().contains(search.trim().toLowerCase()) ||
+                c.getFrom().getCountry().toLowerCase().contains(search.trim().toLowerCase())).map(Flight::getFrom).toList();
+    }
+
 }
+
+
