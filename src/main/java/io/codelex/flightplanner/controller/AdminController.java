@@ -1,7 +1,7 @@
 package io.codelex.flightplanner.controller;
 
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.dto.FlightRequest;
+import io.codelex.flightplanner.requests.FlightRequest;
 import io.codelex.flightplanner.service.FlightService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class AdminController {
     }
 
     @GetMapping("/flights/{id}")
-    public Flight findFlightById(@PathVariable("id") int id) {
+    public Flight fetchById(@PathVariable("id") int id) {
 
         return service.fetch(id);
     }

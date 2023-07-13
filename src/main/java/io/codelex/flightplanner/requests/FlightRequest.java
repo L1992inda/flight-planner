@@ -1,4 +1,4 @@
-package io.codelex.flightplanner.dto;
+package io.codelex.flightplanner.requests;
 
 import io.codelex.flightplanner.domain.Airport;
 import jakarta.validation.Valid;

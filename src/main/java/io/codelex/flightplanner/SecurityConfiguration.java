@@ -8,17 +8,18 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-    @Configuration
-    public class SecurityConfiguration {
+@Configuration
+public class SecurityConfiguration {
 
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http.httpBasic(withDefaults())
-                    .authorizeHttpRequests((authorize) -> authorize
-                            .requestMatchers("/testing-api/**", "/api/**").permitAll()
-                            .anyRequest().authenticated()
-                    );
-            http.csrf(AbstractHttpConfigurer::disable);
-            return http.build();
-        }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .httpBasic(withDefaults())
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("admin-api/flights").authenticated()
+                        .requestMatchers("admin-api/flights/{flightId}").authenticated()
+                        .anyRequest().permitAll());
+        http.csrf(AbstractHttpConfigurer::disable);
+        return http.build();
+    }
 }

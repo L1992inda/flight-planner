@@ -2,8 +2,10 @@ package io.codelex.flightplanner.service;
 
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.dto.FlightRequest;
+import io.codelex.flightplanner.domain.PageResult;
 import io.codelex.flightplanner.repository.FlightRepository;
+import io.codelex.flightplanner.requests.FlightRequest;
+import io.codelex.flightplanner.requests.SearchFlightRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,6 +19,7 @@ import java.util.List;
 public class FlightService {
     private final FlightRepository repository;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
 
     public FlightService(FlightRepository repository) {
         this.repository = repository;
@@ -91,4 +94,22 @@ public class FlightService {
     public List<Airport> searchAirport(String search) {
         return repository.searchByPhrases(search);
     }
+
+    public PageResult<Flight> searchFlights(SearchFlightRequest request) {
+        if (request.getFrom().equalsIgnoreCase(request.getTo())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } else {
+            return repository.searchFlights(request);
+        }
+    }
+
+    public Flight findFlightById(int id) {
+        Flight returnFlights = repository.findFlightById(id);
+        if (returnFlights == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } else {
+            return returnFlights;
+        }
+    }
 }
+
