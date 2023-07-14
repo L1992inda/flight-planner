@@ -4,29 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PageResult<T> {
-    int page;
-    int totalItems;
-    List<T> items = new ArrayList<>();
+    private long page;
+    private long totalItems;
+    private List<T> items = new ArrayList<>();
 
-    public PageResult(int page, int totalItems, List<T> items) {
+    public PageResult(long page, long totalItems, List<T> items) {
         this.page = page;
         this.totalItems = totalItems;
         this.items = items;
     }
 
-    public int getPage() {
+    public long getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(long page) {
         this.page = page;
     }
 
-    public int getTotalItems() {
+    public long getTotalItems() {
         return totalItems;
     }
 
-    public void setTotalItems(int totalItems) {
+    public void setTotalItems(long totalItems) {
         this.totalItems = totalItems;
     }
 

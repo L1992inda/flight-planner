@@ -1,6 +1,5 @@
 package io.codelex.flightplanner.requests;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
@@ -9,14 +8,11 @@ import java.time.LocalDate;
 
 @Validated
 public class SearchFlightRequest {
-    @NotBlank
     @NotNull
     private String from;
 
-    @NotBlank
     @NotNull
     private String to;
-
 
     @NotNull
     private String departureDate;

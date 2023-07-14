@@ -27,14 +27,14 @@ public class AdminController {
     }
 
     @GetMapping("/flights/{id}")
-    public Flight fetchById(@PathVariable("id") int id) {
+    public Flight fetchById(@PathVariable("id") long id) {
 
         return service.fetch(id);
     }
 
     @DeleteMapping("/flights/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteFlightById(@PathVariable("id") int id) {
+    public void deleteFlightById(@PathVariable("id") long id) {
         service.delete(id);
     }
 

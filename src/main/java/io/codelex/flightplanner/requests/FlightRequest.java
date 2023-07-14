@@ -10,19 +10,19 @@ import org.springframework.validation.annotation.Validated;
 public class FlightRequest {
     @Valid
     @NotNull
-    Airport from;
+    private Airport from;
     @Valid
     @NotNull
-    Airport to;
+    private Airport to;
     @NotBlank
     @NotNull
-    String carrier;
+    private String carrier;
     @NotBlank
-    String departureTime;
+    private String departureTime;
     @NotBlank
-    String arrivalTime;
+    private String arrivalTime;
 
-    public FlightRequest(@NotNull Airport from, @NotNull Airport to, @NotNull String carrier, String departureTime, String arrivalTime) {
+    public FlightRequest(Airport from, Airport to, String carrier, String departureTime, String arrivalTime) {
         this.from = from;
         this.to = to;
         this.carrier = carrier;
@@ -30,27 +30,27 @@ public class FlightRequest {
         this.arrivalTime = arrivalTime;
     }
 
-    public @NotNull Airport getFrom() {
+    public Airport getFrom() {
         return from;
     }
 
-    public void setFrom(@NotNull Airport from) {
+    public void setFrom(Airport from) {
         this.from = from;
     }
 
-    public @NotNull Airport getTo() {
+    public Airport getTo() {
         return to;
     }
 
-    public void setTo(@NotNull Airport to) {
+    public void setTo(Airport to) {
         this.to = to;
     }
 
-    public @NotNull String getCarrier() {
+    public String getCarrier() {
         return carrier;
     }
 
-    public void setCarrier(@NotNull String carrier) {
+    public void setCarrier(String carrier) {
         this.carrier = carrier;
     }
 

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Validated
 public class Flight {
     @NotBlank
-    private int id;
+    private long id;
     @Valid
     @NotNull
     @NotBlank
@@ -31,7 +31,7 @@ public class Flight {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime arrivalTime;
 
-    public Flight(int id, @NotNull Airport from, @NotNull Airport to, String carrier, LocalDateTime departureTime, LocalDateTime arrivalTime) {
+    public Flight(long id, @NotNull Airport from, @NotNull Airport to, String carrier, LocalDateTime departureTime, LocalDateTime arrivalTime) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -43,7 +43,7 @@ public class Flight {
     }
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

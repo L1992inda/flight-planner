@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/testing-api")
 public class TestController {
-    FlightService service;
+    private final FlightService service;
 
     public TestController(FlightService service) {
         this.service = service;

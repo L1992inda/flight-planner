@@ -30,13 +30,13 @@ public class CustomerController {
 
     @PostMapping("/flights/search")
     @ResponseStatus(HttpStatus.OK)
-    public PageResult searchFlights(@RequestBody @Valid SearchFlightRequest request) {
-        return service.searchFlights(request);
+    public PageResult<Flight> searchFlights(@RequestBody @Valid SearchFlightRequest request) {
+        return service.search(request);
     }
 
     @GetMapping("/flights/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Flight findFlightById(@PathVariable("id") int id) {
+    public Flight findFlightById(@PathVariable("id") long id) {
         return service.findFlightById(id);
     }
 

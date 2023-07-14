@@ -26,7 +26,7 @@ public class FlightService {
     }
 
     public synchronized Flight add(FlightRequest request) {
-        int id = repository.getFlights().stream().mapToInt(Flight::getId).max().orElse(0);
+        long id = repository.getFlights().stream().mapToLong(Flight::getId).max().orElse(0);
         Flight flight = new Flight(id + 1,
                 request.getFrom(),
                 request.getTo(),
@@ -63,7 +63,7 @@ public class FlightService {
                 flight.getFrom().getCountry().trim().equalsIgnoreCase(flight.getTo().getCountry().trim());
     }
 
-    public boolean checkTime(Flight flight) {
+   private boolean checkTime(Flight flight) {
         return flight.getArrivalTime()
                 .isBefore(flight.getDepartureTime()) ||
                 flight.getDepartureTime().equals(flight.getArrivalTime());
@@ -78,7 +78,7 @@ public class FlightService {
         repository.clearFlightsList();
     }
 
-    public Flight fetch(int id) {
+    public Flight fetch(long id) {
         try {
             return repository.fetchFlight(id);
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class FlightService {
     }
 
 
-    public synchronized void delete(int id) {
+    public synchronized void delete(long id) {
         repository.deleteById(id);
     }
 
@@ -95,21 +95,22 @@ public class FlightService {
         return repository.searchByPhrases(search);
     }
 
-    public PageResult<Flight> searchFlights(SearchFlightRequest request) {
-        if (request.getFrom().equalsIgnoreCase(request.getTo())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } else {
-            return repository.searchFlights(request);
-        }
-    }
 
-    public Flight findFlightById(int id) {
+    public Flight findFlightById(long id) {
         Flight returnFlights = repository.findFlightById(id);
         if (returnFlights == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         } else {
             return returnFlights;
         }
+    }
+
+    public PageResult<Flight> search(SearchFlightRequest searchFlightRequest) {
+        if (searchFlightRequest.getTo().equalsIgnoreCase(searchFlightRequest.getFrom())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+        }
+        return repository.searchFlights(searchFlightRequest);
     }
 }
 

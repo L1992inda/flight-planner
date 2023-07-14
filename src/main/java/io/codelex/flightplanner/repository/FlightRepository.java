@@ -29,7 +29,7 @@ public class FlightRepository {
         return flightsList;
     }
 
-    public Flight fetchFlight(int id) {
+    public Flight fetchFlight(long id) {
 
         return getFlights().stream()
                 .filter(c -> c.getId() == id)
@@ -37,7 +37,7 @@ public class FlightRepository {
                 .get(0);
     }
 
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         getFlights().removeIf(c -> c.getId() == id);
     }
 
@@ -48,17 +48,18 @@ public class FlightRepository {
                 c.getFrom().getCountry().toLowerCase().contains(search.trim().toLowerCase())).map(Flight::getFrom).toList();
     }
 
-    public PageResult<Flight> searchFlights(SearchFlightRequest request) {
+    public PageResult<Flight> searchFlights(SearchFlightRequest searchFlightRequest) {
 
         List<Flight> flights = getFlights().stream()
-                .filter(c -> c.getFrom().getAirport().equalsIgnoreCase(request.getFrom()) &
-                        c.getTo().getAirport().equalsIgnoreCase(request.getFrom()) &
-                        c.getDepartureTime().toString().equals(request.getDepartureDate())).toList();
+                .filter(c -> c.getFrom().getAirport().equalsIgnoreCase(searchFlightRequest.getFrom()) &
+                        c.getTo().getAirport().equalsIgnoreCase(searchFlightRequest.getTo()) &&
+                        c.getDepartureTime().toString().contains((searchFlightRequest.getDepartureDate()))).toList();
         return new PageResult<>(0, flights.size(), flights);
 
     }
 
-    public Flight findFlightById(int id) {
+
+    public Flight findFlightById(long id) {
         return flightsList.stream()
                 .filter(c -> c.getId() == id).findAny().orElse(null);
     }
