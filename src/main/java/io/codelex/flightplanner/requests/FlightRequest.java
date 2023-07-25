@@ -4,9 +4,8 @@ import io.codelex.flightplanner.domain.Airport;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.validation.annotation.Validated;
 
-@Validated
+
 public class FlightRequest {
     @Valid
     @NotNull
@@ -15,7 +14,6 @@ public class FlightRequest {
     @NotNull
     private Airport to;
     @NotBlank
-    @NotNull
     private String carrier;
     @NotBlank
     private String departureTime;

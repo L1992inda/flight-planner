@@ -5,10 +5,8 @@ import io.codelex.flightplanner.requests.FlightRequest;
 import io.codelex.flightplanner.service.FlightService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Validated
 @RestController
 @RequestMapping("/admin-api")
 public class AdminController {

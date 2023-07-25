@@ -63,7 +63,7 @@ public class FlightService {
                 flight.getFrom().getCountry().trim().equalsIgnoreCase(flight.getTo().getCountry().trim());
     }
 
-   private boolean checkTime(Flight flight) {
+    private boolean checkTime(Flight flight) {
         return flight.getArrivalTime()
                 .isBefore(flight.getDepartureTime()) ||
                 flight.getDepartureTime().equals(flight.getArrivalTime());

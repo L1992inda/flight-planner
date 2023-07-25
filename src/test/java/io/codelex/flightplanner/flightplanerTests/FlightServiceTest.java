@@ -48,6 +48,8 @@ public class FlightServiceTest {
         PageResult<Flight> actualPageResul = service.search(searchFlightRequest);
         Mockito.verify(repository).searchFlights(searchFlightRequest);
         Assertions.assertEquals(expectedPageResult, actualPageResul);
+        Assertions.assertEquals(1,expectedPageResult.getTotalItems());
+        Assertions.assertEquals(1,actualPageResul.getTotalItems());
 
     }
 }

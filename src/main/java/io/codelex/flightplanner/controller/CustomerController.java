@@ -7,13 +7,11 @@ import io.codelex.flightplanner.requests.SearchFlightRequest;
 import io.codelex.flightplanner.service.FlightService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@Validated
 @RequestMapping("/api")
 public class CustomerController {
     private final FlightService service;

@@ -14,24 +14,22 @@ public class Flight {
     private long id;
     @Valid
     @NotNull
-    @NotBlank
     private Airport from;
     @Valid
     @NotNull
-    @NotBlank
     private Airport to;
     @NotBlank
     private String carrier;
 
-    @NotBlank
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime departureTime;
 
-    @NotBlank
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime arrivalTime;
 
-    public Flight(long id, @NotNull Airport from, @NotNull Airport to, String carrier, LocalDateTime departureTime, LocalDateTime arrivalTime) {
+    public Flight(long id, Airport from, Airport to, String carrier, LocalDateTime departureTime, LocalDateTime arrivalTime) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -51,19 +49,19 @@ public class Flight {
         this.id = id;
     }
 
-    public @NotNull Airport getFrom() {
+    public Airport getFrom() {
         return from;
     }
 
-    public void setFrom(@NotNull Airport from) {
+    public void setFrom(Airport from) {
         this.from = from;
     }
 
-    public @NotNull Airport getTo() {
+    public Airport getTo() {
         return to;
     }
 
-    public void setTo(@NotNull Airport to) {
+    public void setTo(Airport to) {
         this.to = to;
     }
 
