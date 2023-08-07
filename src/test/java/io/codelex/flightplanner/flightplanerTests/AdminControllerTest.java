@@ -3,7 +3,7 @@ package io.codelex.flightplanner.flightplanerTests;
 import io.codelex.flightplanner.controller.AdminController;
 import io.codelex.flightplanner.controller.TestController;
 import io.codelex.flightplanner.domain.Airport;
-import io.codelex.flightplanner.repository.FlightRepository;
+import io.codelex.flightplanner.repository.FlightInMemoryRepository;
 import io.codelex.flightplanner.requests.FlightRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 @SpringBootTest
 public class AdminControllerTest {
     @Autowired
-    FlightRepository repository;
+    FlightInMemoryRepository repository;
     @Autowired
     AdminController adminController;
     @Autowired
