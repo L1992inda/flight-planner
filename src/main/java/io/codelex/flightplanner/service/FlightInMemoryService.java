@@ -45,7 +45,7 @@ public class FlightInMemoryService implements FlightService {
     }
 
 
-    private boolean equalFlight(Flight flight) {
+    public boolean equalFlight(Flight flight) {
         return repository.getFlights().stream()
                 .anyMatch(c -> c.getFrom().getAirport().equals(flight.getFrom().getAirport()) &
                         c.getFrom().getCity().equals(flight.getFrom().getCity()) &

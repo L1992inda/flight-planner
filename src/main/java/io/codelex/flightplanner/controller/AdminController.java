@@ -4,8 +4,6 @@ import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.requests.FlightRequest;
 import io.codelex.flightplanner.service.FlightService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private final FlightService service;
-    Logger logger = LoggerFactory.getLogger(AdminController.class);
+
 
     public AdminController(FlightService service) {
         this.service = service;

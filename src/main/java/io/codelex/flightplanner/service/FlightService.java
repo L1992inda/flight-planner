@@ -27,5 +27,7 @@ public interface FlightService {
 
     LocalDateTime arrivalDepartureTime(String time);
 
+    boolean equalFlight(Flight flight);
+
 
 }

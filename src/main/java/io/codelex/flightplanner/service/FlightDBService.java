@@ -8,11 +8,14 @@ import io.codelex.flightplanner.requests.FlightRequest;
 import io.codelex.flightplanner.requests.SearchFlightRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FlightDBService implements FlightService {
@@ -27,49 +30,83 @@ public class FlightDBService implements FlightService {
     }
 
     @Override
-    public Flight add(FlightRequest request) {
-
+    public synchronized Flight add(FlightRequest request) {
 
         Flight newFlight = new Flight();
         newFlight.setFrom(request.getFrom());
-        newFlight.setTo(request.getFrom());
+        newFlight.setTo(request.getTo());
         newFlight.setCarrier(request.getCarrier());
         newFlight.setDepartureTime(arrivalDepartureTime(request.getDepartureTime()));
         newFlight.setArrivalTime(arrivalDepartureTime(request.getArrivalTime()));
 
-        flightRepository.save(newFlight);
+        if (equalFlight(newFlight)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        } else if (newFlight.getFrom().equals(newFlight.getTo())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } else if (newFlight.getDepartureTime().isAfter(newFlight.getArrivalTime()) ||
+                newFlight.getDepartureTime().equals(newFlight.getArrivalTime())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } else {
+            flightRepository.save(newFlight);
+        }
 
         return newFlight;
     }
 
+    public boolean equalFlight(Flight flight) {
+        return flightRepository.findAll().stream()
+                .anyMatch(c -> c.getFrom().getAirport().equals(flight.getFrom().getAirport()) &
+                        c.getFrom().getCity().equals(flight.getFrom().getCity()) &
+                        c.getFrom().getCountry().equals(flight.getFrom().getCountry()) &
+                        c.getCarrier().equals(flight.getCarrier()) &
+                        c.getArrivalTime().equals(flight.getArrivalTime()) &
+                        c.getDepartureTime().equals(flight.getDepartureTime()));
+    }
+
     @Override
     public void clear() {
+        flightRepository.deleteAll();
 
     }
 
     @Override
     public Flight fetch(long id) {
-        return null;
+        Optional<Flight> fetch = flightRepository.findById(id);
+        if (fetch.isPresent()) {
+            return fetch.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
     public void delete(long id) {
-
+        flightRepository.deleteById(id);
     }
 
     @Override
     public List<Airport> searchAirport(String search) {
-        return null;
+        return flightRepository.searchAirport(search);
     }
 
     @Override
     public Flight findFlightById(long id) {
-        return null;
+        Optional<Flight> fetch = flightRepository.findById(id);
+        if (fetch.isPresent()) {
+            return fetch.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
+
 
     @Override
     public PageResult<Flight> search(SearchFlightRequest searchFlightRequest) {
-        return null;
+        List<Flight> flights = flightRepository.findAll().stream()
+                .filter(c -> c.getFrom().getAirport().equalsIgnoreCase(searchFlightRequest.getFrom()) &
+                        c.getTo().getAirport().equalsIgnoreCase(searchFlightRequest.getTo()) &&
+                        c.getDepartureTime().toString().contains((searchFlightRequest.getDepartureDate()))).toList();
+        return new PageResult<>(0, flights.size(), flights);
     }
 
     @Override
