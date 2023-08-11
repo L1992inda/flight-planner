@@ -3,9 +3,9 @@ package io.codelex.flightplanner.flightplanerTests;
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.domain.PageResult;
-import io.codelex.flightplanner.repository.FlightRepository;
+import io.codelex.flightplanner.repository.FlightInMemoryRepository;
 import io.codelex.flightplanner.requests.SearchFlightRequest;
-import io.codelex.flightplanner.service.FlightService;
+import io.codelex.flightplanner.service.FlightInMemoryService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-public class FlightServiceTest {
+public class FlightInMemoryServiceTest {
 
     @Mock
-    FlightRepository repository;
+    FlightInMemoryRepository repository;
     @InjectMocks
-    FlightService service;
+    FlightInMemoryService service;
 
     @Test
     public void searchFlight() {

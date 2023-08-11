@@ -1,8 +1,19 @@
 package io.codelex.flightplanner.domain;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.Objects;
+
+@Entity
+@Table(name = "airport")
 public class Airport {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "airport_id")
+    private long id;
+
     @NotBlank
     private String country;
 
@@ -16,6 +27,10 @@ public class Airport {
         this.country = country;
         this.city = city;
         this.airport = airport;
+    }
+
+    public Airport() {
+
     }
 
     public String getCountry() {
@@ -42,5 +57,25 @@ public class Airport {
         this.airport = airport;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Airport airport1 = (Airport) o;
+        return Objects.equals(country, airport1.country) && Objects.equals(city, airport1.city) && Objects.equals(airport, airport1.airport);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(country, city, airport);
+    }
+
+    @Override
+    public String toString() {
+        return "Airport{" +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", airport='" + airport + '\'' +
+                '}';
+    }
 }
