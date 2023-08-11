@@ -1,5 +1,6 @@
 package io.codelex.flightplanner.service;
 
+import io.codelex.flightplanner.BooleanMethods;
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.domain.PageResult;
@@ -9,14 +10,11 @@ import io.codelex.flightplanner.requests.SearchFlightRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
-public class FlightInMemoryService implements FlightService {
+public class FlightInMemoryService extends BooleanMethods implements FlightService {
     private final FlightInMemoryRepository repository;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 
     public FlightInMemoryService(FlightInMemoryRepository repository) {
@@ -44,7 +42,6 @@ public class FlightInMemoryService implements FlightService {
         return flight;
     }
 
-
     public boolean equalFlight(Flight flight) {
         return repository.getFlights().stream()
                 .anyMatch(c -> c.getFrom().getAirport().equals(flight.getFrom().getAirport()) &
@@ -53,23 +50,6 @@ public class FlightInMemoryService implements FlightService {
                         c.getCarrier().equals(flight.getCarrier()) &
                         c.getArrivalTime().equals(flight.getArrivalTime()) &
                         c.getDepartureTime().equals(flight.getDepartureTime()));
-    }
-
-    private boolean sameAirport(Flight flight) {
-        return flight.getFrom().getAirport().trim().equalsIgnoreCase(flight.getTo().getAirport().trim()) &
-                flight.getFrom().getCity().trim().equalsIgnoreCase(flight.getTo().getCity().trim()) &
-                flight.getFrom().getCountry().trim().equalsIgnoreCase(flight.getTo().getCountry().trim());
-    }
-
-    private boolean checkTime(Flight flight) {
-        return flight.getArrivalTime()
-                .isBefore(flight.getDepartureTime()) ||
-                flight.getDepartureTime().equals(flight.getArrivalTime());
-    }
-
-    public LocalDateTime arrivalDepartureTime(String time) {
-        return LocalDateTime.parse(time, formatter);
-
     }
 
     public void clear() {
@@ -90,18 +70,10 @@ public class FlightInMemoryService implements FlightService {
     }
 
     public List<Airport> searchAirport(String search) {
+
         return repository.searchByPhrases(search);
     }
 
-
-    public Flight findFlightById(long id) {
-        Flight returnFlights = repository.findFlightById(id);
-        if (returnFlights == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } else {
-            return returnFlights;
-        }
-    }
 
     public PageResult<Flight> search(SearchFlightRequest searchFlightRequest) {
         if (searchFlightRequest.getTo().equalsIgnoreCase(searchFlightRequest.getFrom())) {

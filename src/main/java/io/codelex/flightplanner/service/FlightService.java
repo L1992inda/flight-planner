@@ -6,7 +6,6 @@ import io.codelex.flightplanner.domain.PageResult;
 import io.codelex.flightplanner.requests.FlightRequest;
 import io.codelex.flightplanner.requests.SearchFlightRequest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface FlightService {
@@ -21,13 +20,9 @@ public interface FlightService {
 
     List<Airport> searchAirport(String search);
 
-    Flight findFlightById(long id);
+    //  Flight findFlightById(long id);
 
     PageResult<Flight> search(SearchFlightRequest searchFlightRequest);
-
-    LocalDateTime arrivalDepartureTime(String time);
-
-    boolean equalFlight(Flight flight);
 
 
 }

@@ -53,15 +53,9 @@ public class FlightInMemoryRepository {
         List<Flight> flights = getFlights().stream()
                 .filter(c -> c.getFrom().getAirport().equalsIgnoreCase(searchFlightRequest.getFrom()) &
                         c.getTo().getAirport().equalsIgnoreCase(searchFlightRequest.getTo()) &&
-                        c.getDepartureTime().toString().contains((searchFlightRequest.getDepartureDate()))).toList();
+                        c.getDepartureTime().toString().equals((searchFlightRequest.getDepartureDate()))).toList();
         return new PageResult<>(0, flights.size(), flights);
 
-    }
-
-
-    public Flight findFlightById(long id) {
-        return flightsList.stream()
-                .filter(c -> c.getId() == id).findAny().orElse(null);
     }
 
 

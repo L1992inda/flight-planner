@@ -35,7 +35,7 @@ public class CustomerController {
     @GetMapping("/flights/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Flight findFlightById(@PathVariable("id") long id) {
-        return service.findFlightById(id);
+        return service.fetch(id);
     }
 
 

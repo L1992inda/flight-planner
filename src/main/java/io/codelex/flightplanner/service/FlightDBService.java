@@ -1,8 +1,10 @@
 package io.codelex.flightplanner.service;
 
+import io.codelex.flightplanner.BooleanMethods;
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.domain.PageResult;
+import io.codelex.flightplanner.repository.AirportRepository;
 import io.codelex.flightplanner.repository.FlightRepository;
 import io.codelex.flightplanner.requests.FlightRequest;
 import io.codelex.flightplanner.requests.SearchFlightRequest;
@@ -12,21 +14,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class FlightDBService implements FlightService {
+public class FlightDBService extends BooleanMethods implements FlightService {
 
     private final FlightRepository flightRepository;
+    private final AirportRepository airportRepository;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     Logger logger = LoggerFactory.getLogger(FlightDBService.class);
 
-    public FlightDBService(FlightRepository flightRepository) {
+    public FlightDBService(FlightRepository flightRepository, AirportRepository airportRepository) {
+
         this.flightRepository = flightRepository;
+        this.airportRepository = airportRepository;
     }
 
     @Override
@@ -41,26 +42,39 @@ public class FlightDBService implements FlightService {
 
         if (equalFlight(newFlight)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
-        } else if (newFlight.getFrom().equals(newFlight.getTo())) {
+        } else if (sameAirport(newFlight)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } else if (newFlight.getDepartureTime().isAfter(newFlight.getArrivalTime()) ||
-                newFlight.getDepartureTime().equals(newFlight.getArrivalTime())) {
+        } else if (checkTime(newFlight)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         } else {
             flightRepository.save(newFlight);
-        }
 
-        return newFlight;
+
+            return newFlight;
+        }
     }
 
     public boolean equalFlight(Flight flight) {
-        return flightRepository.findAll().stream()
-                .anyMatch(c -> c.getFrom().getAirport().equals(flight.getFrom().getAirport()) &
-                        c.getFrom().getCity().equals(flight.getFrom().getCity()) &
-                        c.getFrom().getCountry().equals(flight.getFrom().getCountry()) &
-                        c.getCarrier().equals(flight.getCarrier()) &
-                        c.getArrivalTime().equals(flight.getArrivalTime()) &
-                        c.getDepartureTime().equals(flight.getDepartureTime()));
+        return flightRepository.findAll().stream().anyMatch(c -> c.getFrom().getAirport().equals(flight.getFrom().getAirport()) &
+                c.getFrom().getCity().equals(flight.getFrom().getCity()) &
+                c.getFrom().getCountry().equals(flight.getFrom().getCountry()) &
+                c.getCarrier().equals(flight.getCarrier()) &
+                c.getArrivalTime().equals(flight.getArrivalTime()) &
+                c.getDepartureTime().equals(flight.getDepartureTime()));
+    }
+
+    @Override
+    public Flight fetch(long id) {
+        return flightRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+    }
+
+    @Override
+    public synchronized void delete(long id) {
+        if (flightRepository.existsById(id)) {
+            flightRepository.deleteById(id);
+        }
     }
 
     @Override
@@ -69,48 +83,27 @@ public class FlightDBService implements FlightService {
 
     }
 
-    @Override
-    public Flight fetch(long id) {
-        Optional<Flight> fetch = flightRepository.findById(id);
-        if (fetch.isPresent()) {
-            return fetch.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @Override
-    public void delete(long id) {
-        flightRepository.deleteById(id);
-    }
 
     @Override
     public List<Airport> searchAirport(String search) {
-        return flightRepository.searchAirport(search);
-    }
-
-    @Override
-    public Flight findFlightById(long id) {
-        Optional<Flight> fetch = flightRepository.findById(id);
-        if (fetch.isPresent()) {
-            return fetch.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        return airportRepository.searchAirport(search.toLowerCase().trim());
     }
 
 
     @Override
     public PageResult<Flight> search(SearchFlightRequest searchFlightRequest) {
-        List<Flight> flights = flightRepository.findAll().stream()
-                .filter(c -> c.getFrom().getAirport().equalsIgnoreCase(searchFlightRequest.getFrom()) &
-                        c.getTo().getAirport().equalsIgnoreCase(searchFlightRequest.getTo()) &&
-                        c.getDepartureTime().toString().contains((searchFlightRequest.getDepartureDate()))).toList();
-        return new PageResult<>(0, flights.size(), flights);
+        if (searchFlightRequest.getFrom() != null & searchFlightRequest.getTo() != null &
+                searchFlightRequest.getDepartureDate() != null) {
+
+            if (searchFlightRequest.getFrom().equalsIgnoreCase(searchFlightRequest.getTo())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            List<Flight> flights = flightRepository.searchFlights(searchFlightRequest.getFrom(), searchFlightRequest.getTo(), searchFlightRequest.getDepartureDate());
+            return new PageResult<>(0, flights.size(), flights);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @Override
-    public LocalDateTime arrivalDepartureTime(String time) {
-        return LocalDateTime.parse(time, formatter);
-    }
 }
+
